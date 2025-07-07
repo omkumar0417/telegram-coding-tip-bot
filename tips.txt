@@ -1,1 +1,50 @@
-Join open-source projects to improve real-world skills.
+1. Always use StringBuilder for concatenating strings inside loops instead of using + operator.
+2. Prefer interfaces over abstract classes when designing APIs.
+3. Use equals() instead of == when comparing object values in Java.
+4. Make class fields private and access them via getters/setters to follow encapsulation.
+5. Always override both equals() and hashCode() when using objects in HashMap or HashSet.
+6. Use enhanced for loop or streams to simplify iterations over collections.
+7. Handle exceptions gracefully using try-catch blocks, never ignore them silently.
+8. Always close database connections using try-with-resources or finally block to prevent memory leaks.
+9. Mark method parameters final if they should not be modified inside the method.
+10. Use @Override annotation to catch errors while overriding methods.
+11. Use enums instead of constants to represent fixed sets of values.
+12. For multi-threaded apps, prefer using concurrent collections like ConcurrentHashMap.
+13. Avoid using raw types; always use generics for type safety.
+14. Always provide meaningful toString() implementations for debugging and logging.
+15. Use access modifiers wisely to enforce encapsulation and prevent misuse.
+16. Avoid using static variables unless truly needed; they stay in memory for entire app lifetime.
+17. In switch statements, always add a default case.
+18. Prefer composition over inheritance to reduce tight coupling.
+19. Use Optional to represent possibly-null return values instead of returning null.
+20. For deep comparisons, use Apache Commons Lang EqualsBuilder.
+21. Use defensive copies when exposing mutable objects from your class.
+22. Avoid initializing variables unnecessarily; use lazy initialization if suitable.
+23. Minimize mutability — prefer immutable classes for data objects.
+24. Avoid catching generic Exception unless really necessary.
+25. Log exceptions with proper stack traces instead of just e.getMessage().
+26. Use thread-safe classes like AtomicInteger for counters in multi-threaded code.
+27. When overriding equals, use instanceof to ensure type safety.
+28. Use Collections.unmodifiableList() to return read-only views.
+29. Use Java records (Java 14+) for data classes when immutability is needed.
+30. Avoid suppressing exceptions silently in catch blocks.
+31. Use streams and lambdas to simplify collection transformations.
+32. Always use break in each case of switch to prevent fall-through.
+33. Avoid using finalize(); use try-with-resources instead for cleanup.
+34. Check for null before calling methods to avoid NullPointerException.
+35. Use dependency injection instead of new for better testability.
+36. Group related constants using enum instead of final static fields.
+37. Keep class files focused — one responsibility per class.
+38. Avoid long parameter lists — refactor using parameter objects.
+39. Use logger frameworks like SLF4J instead of System.out.println().
+40. Use annotations like @Nullable and @NotNull for null safety.
+41. Avoid using Date/Calendar directly — use java.time API instead.
+42. Use varargs (...) wisely — prefer List for large inputs.
+43. Reuse static final constants instead of duplicating string literals.
+44. Use assertions for development-time checks, not runtime validation.
+45. Cache expensive operations if results are reused frequently.
+46. Use method references (Class::method) to simplify stream pipelines.
+47. Minimize public fields — hide implementation details.
+48. Don’t rely on object finalization for resource cleanup.
+49. Avoid exposing internal mutable arrays or collections directly.
+50. Profile performance before optimizing — premature optimization is the root of all evil.
