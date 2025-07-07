@@ -1,29 +1,33 @@
-name: Daily Telegram Tip
-
+name: 💬 Daily Telegram Coding Tip
 on:
-  schedule:
-    - cron: '30 4 * * *'   # 10:00 AM IST
-    - cron: '30 12 * * *'  # 6:00 PM IST
-  workflow_dispatch:       # allows manual run from GitHub Actions tab
-
+schedule:
+- cron: '30 4,12 * * *' # 10:00 AM and 6:00 PM IST (4:30 & 12:30 UTC)
+workflow_dispatch: # Allows manual run from GitHub interface
 jobs:
-  run-script:
-    runs-on: ubuntu-latest
+post_tip:
+runs-on: ubuntu-latest
+steps:
+  - name: 📥 Checkout Repository
+    uses: actions/checkout@v3
 
-    steps:
-    - name: Checkout repo
-      uses: actions/checkout@v3
+  - name: 🐍 Set up Python
+    uses: actions/setup-python@v4
+    with:
+      python-version: '3.10'
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
+  - name: 🔧 Install dependencies
+    run: pip install requests
 
-    - name: Install dependencies
-      run: pip install requests
+  - name: 🚀 Run Telegram Tip Bot
+    env:
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHANNEL: ${{ secrets.TELEGRAM_CHANNEL }}
+    run: python telegram_bot.py
 
-    - name: Run Telegram bot script
-      env:
-        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-        TELEGRAM_CHANNEL: ${{ secrets.TELEGRAM_CHANNEL }}
-      run: python telegram_bot.py
+  - name: 💾 Commit used_ids.txt
+    run: |
+      git config user.name "github-actions[bot]"
+      git config user.email "github-actions[bot]@users.noreply.github.com"
+      git add used_ids.txt
+      git commit -m "✅ Marked tip as used in used_ids.txt" || echo "No changes to commit"
+      git push https://x-access-token:${{ secrets.GH_PAT }}@github.com/${{ github.repository }}.git HEAD:main
