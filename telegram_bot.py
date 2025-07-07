@@ -22,8 +22,14 @@ shift = 0 if hour < 12 else 1
 index = ((day_number - 1) * 2 + shift) % len(tips)
 tip = tips[index]
 
-# Format message
-message = f"💡 Daily Coding Tip #{index + 1}\n\n{tip}\n\n#Java #DSA #DevTips"
+# Create linewise formatted message
+message = (
+    f"🧠 Daily Coding Tip #{index + 1}\n"
+    f"\n"
+    f"{tip}\n"
+    f"\n"
+    f"#Java #DSA #DevTips"
+)
 
 # Send to Telegram
 url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
