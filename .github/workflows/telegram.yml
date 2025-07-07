@@ -3,22 +3,22 @@ name: Daily Telegram Tip Bot
 on:
   schedule:
     # - cron: '*/1 * * * *'  # Every 1 minute (UTC)
-    - cron: '55 0 * * *' # 12:55 AM UTC
-    - cron: '56 0 * * *' # 12:56 AM
-    - cron: '57 0 * * *' # 12:57 AM
-    - cron: '58 0 * * *' # 12:58 AM
-    - cron: '59 0 * * *' # 12:59 AM
-    - cron: '0 1 * * *' # 1:00 AM
-    - cron: '1 1 * * *' # 1:01 AM
-    - cron: '2 1 * * *' # 1:02 AM
-    - cron: '3 1 * * *' # 1:03 AM
-    - cron: '4 1 * * *' # 1:04 AM
-    - cron: '5 1 * * *' # 1:05 AM
-    - cron: '6 1 * * *' # 1:06 AM
-    - cron: '7 1 * * *' # 1:07 AM
-    - cron: '8 1 * * *' # 1:08 AM
-    - cron: '9 1 * * *' # 1:09 AM
-    - cron: '10 1 * * *' # 1:10 AM
+     - cron: '25 19 * * *'
+     - cron: '26 19 * * *'
+     - cron: '27 19 * * *'
+     - cron: '28 19 * * *'
+     - cron: '29 19 * * *'
+     - cron: '30 19 * * *'
+     - cron: '31 19 * * *'
+     - cron: '32 19 * * *'
+     - cron: '33 19 * * *'
+     - cron: '34 19 * * *'
+     - cron: '35 19 * * *'
+     - cron: '36 19 * * *'
+     - cron: '37 19 * * *'
+     - cron: '38 19 * * *'
+     - cron: '39 19 * * *'
+     - cron: '40 19 * * *'
   workflow_dispatch:       # Manual trigger from GitHub UI
 
 jobs:
