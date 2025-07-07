@@ -1,0 +1,4 @@
+1. Always use StringBuilder for concatenating strings inside loops instead of using + operator.
+2. Prefer interfaces over abstract classes when designing APIs.
+3. Use equals() instead of == when comparing object values in Java.
+4. Make class fields private and access them via getters/setters to follow encapsulation.
