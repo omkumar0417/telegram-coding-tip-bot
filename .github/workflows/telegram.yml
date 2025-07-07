@@ -6,6 +6,13 @@ on:
     - cron: '30 4 * * *'
     # 6:00 PM IST (12:30 PM UTC)
     - cron: '30 12 * * *'
+    - cron: '52 17 * * *'  # 11:22 PM IST
+    - cron: '55 17 * * *'  # 11:25 PM IST
+    - cron: '56 17 * * *'  # 11:26 PM IST
+    - cron: '57 17 * * *'  # 11:27 PM IST
+    - cron: '58 17 * * *'  # 11:28 PM IST
+    - cron: '59 17 * * *'  # 11:29 PM IST
+    - cron: '0 18 * * *'   # 11:30 PM IST
   workflow_dispatch:  # allows manual run from GitHub UI
 
 jobs:
