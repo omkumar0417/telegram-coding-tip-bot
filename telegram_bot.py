@@ -43,12 +43,42 @@
 #     print(f"✅ Sent Tip #{index} to Telegram")
 # else:
 #     print(message)
+# import os
+# import requests
+# import random
+# from datetime import datetime
+
+# # Read environment secrets
+# TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
+# CHANNEL = os.environ["TELEGRAM_CHANNEL"]
+
+# # Load all tips
+# with open("tips.txt", "r", encoding="utf-8") as f:
+#     tips = [line.strip() for line in f if line.strip()]
+
+# # Use current UTC date and hour to create a deterministic random seed
+# now = datetime.utcnow()
+# day = now.timetuple().tm_yday  # 1-365
+# shift = 0 if now.hour < 12 else 1
+# seed = (day * 2 + shift)
+
+# # Shuffle tips with consistent seed per time slot
+# random.Random(seed).shuffle(tips)
+# tip = tips[0]
+
+# # Format and send the message
+# message = f"💡 Daily Coding Tip #{seed % len(tips) + 1}\n\n{tip}\n\n#Java #DSA #DevTips"
+
+# url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
+# payload = {"chat_id": CHANNEL, "text": message}
+# res = requests.post(url, data=payload)
+
+# print("✅ Tip sent:", tip)
 import os
 import requests
 import random
-from datetime import datetime
 
-# Read environment secrets
+# Read secrets from environment
 TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
 CHANNEL = os.environ["TELEGRAM_CHANNEL"]
 
@@ -56,21 +86,15 @@ CHANNEL = os.environ["TELEGRAM_CHANNEL"]
 with open("tips.txt", "r", encoding="utf-8") as f:
     tips = [line.strip() for line in f if line.strip()]
 
-# Use current UTC date and hour to create a deterministic random seed
-now = datetime.utcnow()
-day = now.timetuple().tm_yday  # 1-365
-shift = 0 if now.hour < 12 else 1
-seed = (day * 2 + shift)
+# Select a completely random tip
+tip = random.choice(tips)
 
-# Shuffle tips with consistent seed per time slot
-random.Random(seed).shuffle(tips)
-tip = tips[0]
+# Format message
+message = f"💡 Daily Coding Tip\n\n{tip}\n\n#Java #DSA #DevTips"
 
-# Format and send the message
-message = f"💡 Daily Coding Tip #{seed % len(tips) + 1}\n\n{tip}\n\n#Java #DSA #DevTips"
-
+# Send to Telegram
 url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
 payload = {"chat_id": CHANNEL, "text": message}
 res = requests.post(url, data=payload)
 
-print("✅ Tip sent:", tip)
+print("✅ Sent random tip to Telegram")
