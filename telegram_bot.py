@@ -1,35 +1,45 @@
 import os
 import requests
-from datetime import datetime
-import hashlib
+from pathlib import Path
 
-# Read environment variables
+# Read secrets from environment
 TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
 CHANNEL = os.environ["TELEGRAM_CHANNEL"]
 
-# Load and shuffle tips deterministically
-with open("tips.txt", "r", encoding="utf-8") as f:
-    tips = [line.strip() for line in f if line.strip()]
+# Paths
+TIPS_FILE = "tips.txt"
+USED_FILE = "used_tips.txt"
 
-# Get current time info
-now = datetime.utcnow()
-date_str = now.strftime("%Y-%m-%d")
-minute_str = now.strftime("%Y-%m-%d-%H-%M")
+# Load tips
+all_tips = []
+with open(TIPS_FILE, "r", encoding="utf-8") as f:
+    all_tips = [line.strip() for line in f if line.strip()]
 
-# Use current minute to ensure uniqueness
-seed = int(hashlib.sha256(minute_str.encode()).hexdigest(), 16)
-tips_sorted = sorted(tips, key=lambda x: hashlib.sha256((x + minute_str).encode()).hexdigest())
+# Load used tips
+Path(USED_FILE).touch()  # create if not exists
+with open(USED_FILE, "r", encoding="utf-8") as f:
+    used_tips = [line.strip() for line in f if line.strip()]
 
-# Pick the first tip from shuffled list
-tip = tips_sorted[0]
-index = tips.index(tip)
+# Filter unused tips
+unused_tips = [tip for tip in all_tips if tip not in used_tips]
 
-# Format the message
-message = f"💡 Daily Coding Tip #{index + 1}\n\n{tip}\n\n#Java #DSA #DevTips"
+# Handle case where all tips are used
+if not unused_tips:
+    message = "✅ All tips used! Add more tips to tips.txt."
+else:
+    next_tip = unused_tips[0]
+    index = all_tips.index(next_tip) + 1
+    message = f"💡 Daily Coding Tip #{index}\n\n{next_tip}\n\n#Java #DSA #DevTips"
+
+    # Append to used tips
+    with open(USED_FILE, "a", encoding="utf-8") as f:
+        f.write(next_tip + "\n")
 
 # Send to Telegram
-url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
-payload = {"chat_id": CHANNEL, "text": message}
-res = requests.post(url, data=payload)
-
-print(f"✅ Sent Tip #{index + 1} to Telegram")
+if "✅ All tips used!" not in message:
+    url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
+    payload = {"chat_id": CHANNEL, "text": message}
+    res = requests.post(url, data=payload)
+    print(f"✅ Sent Tip #{index} to Telegram")
+else:
+    print(message)
