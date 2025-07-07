@@ -1,5 +1,6 @@
 import os
 import requests
+from datetime import datetime
 
 # Read secrets from environment
 TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
@@ -9,31 +10,24 @@ CHANNEL = os.environ["TELEGRAM_CHANNEL"]
 with open("tips.txt", "r", encoding="utf-8") as f:
     tips = [line.strip() for line in f if line.strip()]
 
-# Load last posted index
-index_file = "last_tip_index.txt"
-if os.path.exists(index_file):
-    with open(index_file, "r") as f:
-        try:
-            last_index = int(f.read().strip())
-        except ValueError:
-            last_index = -1
-else:
-    last_index = -1
+# Calculate run slot (e.g., Day * 2 + shift)
+now = datetime.utcnow()
+day_number = now.timetuple().tm_yday  # 1 to 366
 
-# Get next tip in sequence
-next_index = (last_index + 1) % len(tips)
-tip = tips[next_index]
+# Shift: 0 = morning, 1 = evening
+hour = now.hour
+shift = 0 if hour < 12 else 1
 
-# Format the message
-message = f"💡 Daily Coding Tip #{next_index + 1}\n\n{tip}\n\n#Java #DSA #DevTips"
+# Final tip index (rotates twice daily)
+index = ((day_number - 1) * 2 + shift) % len(tips)
+tip = tips[index]
+
+# Format message
+message = f"💡 Daily Coding Tip #{index + 1}\n\n{tip}\n\n#Java #DSA #DevTips"
 
 # Send to Telegram
 url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
 payload = {"chat_id": CHANNEL, "text": message}
 res = requests.post(url, data=payload)
 
-print(f"✅ Tip #{next_index + 1} sent to Telegram")
-
-# Save updated index
-with open(index_file, "w") as f:
-    f.write(str(next_index))
+print(f"✅ Sent Tip #{index + 1} to Telegram")
