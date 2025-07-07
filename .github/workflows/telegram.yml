@@ -1,34 +1,45 @@
 name: Daily Telegram Tip Bot
+
 on:
-schedule:
-- cron: '33 19 * * *' # 1:03 AM IST
-- cron: '34 19 * * *' # 1:04 AM IST
-- cron: '35 19 * * *' # 1:05 AM IST
-- cron: '36 19 * * *' # 1:06 AM IST
-- cron: '37 19 * * *' # 1:07 AM IST
-- cron: '38 19 * * *' # 1:08 AM IST
-- cron: '39 19 * * *' # 1:09 AM IST
-- cron: '40 19 * * *' # 1:10 AM IST
-workflow_dispatch:
+  schedule:
+    # - cron: '*/1 * * * *'  # Every 1 minute (UTC)
+     - cron: '25 19 * * *'
+     - cron: '26 19 * * *'
+     - cron: '27 19 * * *'
+     - cron: '28 19 * * *'
+     - cron: '29 19 * * *'
+     - cron: '30 19 * * *'
+     - cron: '31 19 * * *'
+     - cron: '32 19 * * *'
+     - cron: '33 19 * * *'
+     - cron: '34 19 * * *'
+     - cron: '35 19 * * *'
+     - cron: '36 19 * * *'
+     - cron: '37 19 * * *'
+     - cron: '38 19 * * *'
+     - cron: '39 19 * * *'
+     - cron: '40 19 * * *'
+  workflow_dispatch:       # Manual trigger from GitHub UI
+
 jobs:
-send-tip:
-runs-on: ubuntu-latest
-steps:
-  - name: Checkout Repository
-    uses: actions/checkout@v3
+  send-tip:
+    runs-on: ubuntu-latest
 
-  - name: Set up Python
-    uses: actions/setup-python@v4
-    with:
-      python-version: '3.10'
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
-  - name: Install dependencies
-    run: pip install -r requirements.txt
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
 
-  - name: Run Telegram bot
-    env:
-      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-      TELEGRAM_CHANNEL: ${{ secrets.TELEGRAM_CHANNEL }}
-    run: python telegram_bot.py
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
 
-    
+      - name: Run Telegram bot
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHANNEL: ${{ secrets.TELEGRAM_CHANNEL }}
+        run: python telegram_bot.py
