@@ -74,27 +74,77 @@
 # res = requests.post(url, data=payload)
 
 # print("✅ Tip sent:", tip)
+
+
+
+
+# import os
+# import requests
+# import random
+
+# # Read secrets from environment
+# TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
+# CHANNEL = os.environ["TELEGRAM_CHANNEL"]
+
+# # Load all tips
+# with open("tips.txt", "r", encoding="utf-8") as f:
+#     tips = [line.strip() for line in f if line.strip()]
+
+# # Select a completely random tip
+# tip = random.choice(tips)
+
+# # Format message
+# message = f"💡 Daily Coding Tip\n\n{tip}\n\n#Java #DSA #DevTips"
+
+# # Send to Telegram
+# url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
+# payload = {"chat_id": CHANNEL, "text": message}
+# res = requests.post(url, data=payload)
+
+# print("✅ Sent random tip to Telegram")
 import os
 import requests
+import json
 import random
 
-# Read secrets from environment
+# Constants
+USED_TIPS_FILE = "used_tips.json"
+TIPS_FILE = "tips.txt"
+
+# Get secrets from environment
 TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
 CHANNEL = os.environ["TELEGRAM_CHANNEL"]
 
-# Load all tips
-with open("tips.txt", "r", encoding="utf-8") as f:
+# Load tips from file
+with open(TIPS_FILE, "r", encoding="utf-8") as f:
     tips = [line.strip() for line in f if line.strip()]
 
-# Select a completely random tip
-tip = random.choice(tips)
+# Load used tips index list
+if os.path.exists(USED_TIPS_FILE):
+    with open(USED_TIPS_FILE, "r") as f:
+        used_indices = json.load(f)
+else:
+    used_indices = []
 
-# Format message
-message = f"💡 Daily Coding Tip\n\n{tip}\n\n#Java #DSA #DevTips"
+# Reset if all tips have been used
+if len(used_indices) >= len(tips):
+    used_indices = []
 
-# Send to Telegram
+# Get an unused tip
+available_indices = list(set(range(len(tips))) - set(used_indices))
+index = random.choice(available_indices)
+tip = tips[index]
+
+# Compose message
+message = f"💡 Daily Coding Tip #{index + 1}\n\n{tip}\n\n#Java #DSA #DevTips"
+
+# Send message to Telegram
 url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
 payload = {"chat_id": CHANNEL, "text": message}
 res = requests.post(url, data=payload)
+print(f"✅ Sent Tip #{index + 1} to Telegram")
 
-print("✅ Sent random tip to Telegram")
+# Save updated used list
+used_indices.append(index)
+with open(USED_TIPS_FILE, "w") as f:
+    json.dump(used_indices, f)
