@@ -135,6 +135,9 @@ available_indices = list(set(range(len(tips))) - set(used_indices))
 index = random.choice(available_indices)
 tip = tips[index]
 
+from datetime import datetime
+print("Workflow running at:", datetime.utcnow())
+
 # Compose message
 message = f"💡 Daily Coding Tip #{index + 1}\n\n{tip}\n\n#Java #DSA #DevTips"
 
