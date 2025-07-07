@@ -4,3 +4,7 @@
 4. Make class fields private and access them via getters/setters to follow encapsulation.
 5. Always override both equals() and hashCode() when using objects in HashMap or HashSet.
 6. Use enhanced for loop or streams to simplify iterations over collections.
+7. Handle exceptions gracefully using try-catch blocks, never ignore them silently.
+8. Always close database connections using try-with-resources or finally block to prevent memory leaks.
+9. Mark method parameters final if they should not be modified inside the method.
+10. Use @Override annotation to catch errors while overriding methods.
