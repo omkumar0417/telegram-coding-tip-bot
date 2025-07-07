@@ -30,3 +30,5 @@ steps:
       TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
       TELEGRAM_CHANNEL: ${{ secrets.TELEGRAM_CHANNEL }}
     run: python telegram_bot.py
+
+    
