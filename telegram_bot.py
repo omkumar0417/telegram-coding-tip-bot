@@ -3,20 +3,20 @@ import requests
 
 # Read your Telegram bot token and channel username from environment
 TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
-CHANNEL = os.environ["TELEGRAM_CHANNEL"]  
+CHANNEL = os.environ["TELEGRAM_CHANNEL"]  # e.g., "@DailyCodingTips"
 
 # Read all tips
 with open("tips.txt", "r", encoding="utf-8") as f:
     tips = [line.strip() for line in f if line.strip()]
 
 # Track which tip was posted last
+index_file = "last_tip_index.txt"
 if os.path.exists(index_file):
     with open(index_file, "r") as f:
         content = f.read().strip()
         last_index = int(content) if content.isdigit() else -1
 else:
     last_index = -1
-
 
 # Calculate next tip index
 next_index = (last_index + 1) % len(tips)
