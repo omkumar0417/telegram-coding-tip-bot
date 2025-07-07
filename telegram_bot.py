@@ -1,48 +1,37 @@
 import os
 import requests
+from datetime import datetime
 import hashlib
 
-# Telegram credentials
+# Read environment variables
 TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
 CHANNEL = os.environ["TELEGRAM_CHANNEL"]
 
-# Load tips
+# Load and shuffle tips deterministically
 with open("tips.txt", "r", encoding="utf-8") as f:
     tips = [line.strip() for line in f if line.strip()]
 
-# Load used tip hashes
-used_path = "used_ids.txt"
-if os.path.exists(used_path):
-    with open(used_path, "r") as f:
-        used_ids = set(line.strip() for line in f)
-else:
-    used_ids = set()
+# Get current day and shift (AM/PM)
+now = datetime.utcnow()
+date_str = now.strftime("%Y-%m-%d")
+shift = "AM" if now.hour < 12 else "PM"
+key = f"{date_str}-{shift}"
 
-# Function to hash tips
-def tip_hash(tip):
-    return hashlib.md5(tip.encode("utf-8")).hexdigest()
+# Deterministic shuffle using the key as seed
+seed = int(hashlib.sha256(key.encode()).hexdigest(), 16)
+tips_sorted = sorted(tips, key=lambda x: hashlib.sha256((x + key).encode()).hexdigest())
 
-# Filter unused tips
-unused = [(i, tip) for i, tip in enumerate(tips) if tip_hash(tip) not in used_ids]
+# Pick the first tip from shuffled list
+tip = tips_sorted[0]
+index = tips.index(tip)
 
-if not unused:
-    print("🎉 All tips have been used.")
-    exit()
-
-# Pick first unused tip (you can randomize if preferred)
-index, tip = unused[0]
-tip_id = tip_hash(tip)
-
-# Append the used tip hash
-with open(used_path, "a", encoding="utf-8") as f:
-    f.write(tip_id + "\n")
-
-# Format message
-message = f"💡 Daily Coding Tip #{len(used_ids) + 1}\n\n{tip}\n\n#Java #DSA #DevTips"
+# Format the message
+message = f"💡 Daily Coding Tip #{index + 1}\n\n{tip}\n\n#Java #DSA #DevTips"
 
 # Send to Telegram
 url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
 payload = {"chat_id": CHANNEL, "text": message}
-requests.post(url, data=payload)
+res = requests.post(url, data=payload)
 
-print(f"✅ Tip #{len(used_ids) + 1} sent.")
+print(f"✅ Sent Tip #{index + 1} to Telegram")
+
