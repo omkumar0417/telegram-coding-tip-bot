@@ -1,61 +1,61 @@
-# import os
-# import requests
-# import json
-# import random
-# from datetime import datetime, timedelta
+import os
+import requests
+import json
+import random
+from datetime import datetime, timedelta
 
-# # Constants
-# TIPS_FILE = "tips.txt"
-# USED_TIPS_FILE = "used_tips.json"
-# MAX_MEMORY_HOURS = 24
+# Constants
+TIPS_FILE = "tips.txt"
+USED_TIPS_FILE = "used_tips.json"
+MAX_MEMORY_HOURS = 24
 
-# # Secrets
-# TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
-# CHANNEL = os.environ["TELEGRAM_CHANNEL"]
+# Secrets
+TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
+CHANNEL = os.environ["TELEGRAM_CHANNEL"]
 
-# # Load all tips
-# with open(TIPS_FILE, "r", encoding="utf-8") as f:
-#     tips = [line.strip() for line in f if line.strip()]
+# Load all tips
+with open(TIPS_FILE, "r", encoding="utf-8") as f:
+    tips = [line.strip() for line in f if line.strip()]
 
-# # Load used tips with timestamps
-# if os.path.exists(USED_TIPS_FILE):
-#     with open(USED_TIPS_FILE, "r") as f:
-#         used_data = json.load(f)
-# else:
-#     used_data = {}
+# Load used tips with timestamps
+if os.path.exists(USED_TIPS_FILE):
+    with open(USED_TIPS_FILE, "r") as f:
+        used_data = json.load(f)
+else:
+    used_data = {}
 
-# # Clean up old entries
-# now = datetime.utcnow()
-# cutoff = now - timedelta(hours=MAX_MEMORY_HOURS)
-# used_data = {k: v for k, v in used_data.items() if datetime.fromisoformat(v) > cutoff}
+# Clean up old entries
+now = datetime.utcnow()
+cutoff = now - timedelta(hours=MAX_MEMORY_HOURS)
+used_data = {k: v for k, v in used_data.items() if datetime.fromisoformat(v) > cutoff}
 
-# # Find available tip indices
-# used_indices = set(map(int, used_data.keys()))
-# available_indices = list(set(range(len(tips))) - used_indices)
+# Find available tip indices
+used_indices = set(map(int, used_data.keys()))
+available_indices = list(set(range(len(tips))) - used_indices)
 
-# # If all tips used in 24h, reset memory
-# if not available_indices:
-#     available_indices = list(range(len(tips)))
-#     used_data = {}
+# If all tips used in 24h, reset memory
+if not available_indices:
+    available_indices = list(range(len(tips)))
+    used_data = {}
 
-# # Choose tip
-# index = random.choice(available_indices)
-# tip = tips[index]
+# Choose tip
+index = random.choice(available_indices)
+tip = tips[index]
 
-# # Format message
-# message = f"💡 Daily Coding Tip #{index + 1}\n\n{tip}\n\n#Java #DSA #DevTips"
+# Format message
+message = f"💡 Daily Coding Tip #{index + 1}\n\n{tip}\n\n#Java #DSA #DevTips"
 
-# # Send to Telegram
-# url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
-# payload = {"chat_id": CHANNEL, "text": message}
-# response = requests.post(url, data=payload)
-# print(f"✅ Sent Tip #{index + 1} at {now} (UTC)")
-# print("Response:", response.status_code, response.text)
+# Send to Telegram
+url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
+payload = {"chat_id": CHANNEL, "text": message}
+response = requests.post(url, data=payload)
+print(f"✅ Sent Tip #{index + 1} at {now} (UTC)")
+print("Response:", response.status_code, response.text)
 
-# # Update used memory
-# used_data[str(index)] = now.isoformat()
-# with open(USED_TIPS_FILE, "w") as f:
-#     json.dump(used_data, f)
+# Update used memory
+used_data[str(index)] = now.isoformat()
+with open(USED_TIPS_FILE, "w") as f:
+    json.dump(used_data, f)
 
 
 
@@ -145,30 +145,30 @@
 
 
 
-import os
-import requests
-import random
+# import os
+# import requests
+# import random
 
-# Read secrets from environment
-TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
-CHANNEL = os.environ["TELEGRAM_CHANNEL"]
+# # Read secrets from environment
+# TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
+# CHANNEL = os.environ["TELEGRAM_CHANNEL"]
 
-# Load all tips
-with open("tips.txt", "r", encoding="utf-8") as f:
-    tips = [line.strip() for line in f if line.strip()]
+# # Load all tips
+# with open("tips.txt", "r", encoding="utf-8") as f:
+#     tips = [line.strip() for line in f if line.strip()]
 
-# Select a completely random tip
-tip = random.choice(tips)
+# # Select a completely random tip
+# tip = random.choice(tips)
 
-# Format message
-message = f"💡 Daily Coding Tip\n\n{tip}\n\n#Java #DSA #DevTips"
+# # Format message
+# message = f"💡 Daily Coding Tip\n\n{tip}\n\n#Java #DSA #DevTips"
 
-# Send to Telegram
-url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
-payload = {"chat_id": CHANNEL, "text": message}
-res = requests.post(url, data=payload)
+# # Send to Telegram
+# url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
+# payload = {"chat_id": CHANNEL, "text": message}
+# res = requests.post(url, data=payload)
 
-print("✅ Sent random tip to Telegram")
+# print("✅ Sent random tip to Telegram")
 
 
 
